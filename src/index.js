@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom'
-import './font-face.css'
+import './core.css'
 import App from './App'
 // import reportWebVitals from './reportWebVitals'
 
