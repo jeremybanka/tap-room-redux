@@ -1,0 +1,14 @@
+[
+  {
+    "name": "Effervescent Brew",
+    "color": "#0a9",
+    "remaining": 16,
+    "total": 20
+  },
+  {
+    "name": "Celestial Brew",
+    "color": "#2af",
+    "remaining": 25,
+    "total": 30
+  }
+]
