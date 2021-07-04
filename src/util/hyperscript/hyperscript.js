@@ -1,67 +1,64 @@
 // https://github.com/mlmorg/react-hyperscript/blob/master/index.js
-/* eslint-disable no-restricted-syntax */
 
 /** @jsxImportSource @emotion/react */
 import React from "react"
 import parseTag from "./parse-tag"
 
+const { isArray } = Array
+const isReactNode = unknown => React.isValidElement(unknown)
+const isChild = unknown =>
+  typeof unknown === `string`
+  || typeof unknown === `number`
+  || isArray(unknown)
+  || isReactNode(unknown)
+const isString = unknown => typeof unknown === `string`
+const isProps = unknown =>
+  typeof unknown === `object`
+   && !isArray(unknown)
+   && !isReactNode(unknown)
+
 export default function h(...args) {
-  let ComponentOrTag = args[0]
-  let properties = args[1]
-  const furtherArgs = args.slice(2).map((arg, idx) =>
-    !arg
-      ? arg
-      : typeof arg === `string`
-        ? arg
-        : Array.isArray(arg)
-          ? { ...arg[0], key: typeof arg === `object` ? idx : arg[0].key }
-          : { ...arg, key: typeof arg === `object` ? idx : arg.key }
-
-  )
-  let children = furtherArgs[1] ? furtherArgs : furtherArgs[0] || undefined
-
-  // console.log(`| furtherArgs[1]`, furtherArgs[1])
-
-  // if only one argument which is an array, wrap items with React.Fragment
-  if (args.length === 1 && Array.isArray(ComponentOrTag)) {
-    return h(React.Fragment, null, ComponentOrTag)
-  } else if (!children && isChildren(properties)) {
-    // If a child array or text node
-    // are passed as the second argument,
-    // shift them
-    children = properties
-    properties = {}
-  } else if (args.length === 2) {
-    // If no children were passed, we don't want to pass "undefined"
-    // and potentially overwrite the `children` prop
-    children = []
-  }
-
-  properties = properties ? ({ ...properties }) : {}
+  if (isArray(args[0])) return h(React.Fragment, null, args[0])
+  const props = isProps(args[1])
+    ? { ...args[1] }
+    : {}
+  const ComponentOrTag = isString(args[0])
+    ? parseTag(args[0], props)
+    : args[0]
+  const children
+    = (
+      isArray(args[1])
+        ? args[1]
+        : isArray(args[2])
+          ? args[2]
+          : isChild(args[1])
+            ? args.slice(1)
+            : args.slice(2)
+    ).map(
+      (arg, idx) =>
+        isReactNode(arg)
+          ? { ...arg, key: typeof arg === `object` ? idx : arg.key }
+          : arg
+    )
 
   // Supported nested dataset attributes
-  if (properties.dataset) {
-    Object.keys(properties.dataset).forEach(attrName => {
-      const dashedAttr = attrName.replace(/([a-z])([A-Z])/, match => `${match[0]}-${match[1].toLowerCase()}`)
-      properties[`data-${dashedAttr}`] = properties.dataset[attrName]
+  if (props.dataset) {
+    Object.keys(props.dataset).forEach(attrName => {
+      const dashedAttr = attrName.replace(
+        /([a-z])([A-Z])/,
+        match => `${match[0]}-${match[1].toLowerCase()}`
+      )
+      props[`data-${dashedAttr}`] = props.dataset[attrName]
     })
-
-    properties.dataset = undefined
+    props.dataset = undefined
   }
 
   // Support nested attributes
-  if (properties.attributes) {
-    Object.keys(properties.attributes).forEach(attrName => {
-      properties[attrName] = properties.attributes[attrName]
+  if (props.attributes) {
+    Object.keys(props.attributes).forEach(attrName => {
+      props[attrName] = props.attributes[attrName]
     })
-
-    properties.attributes = undefined
-  }
-
-  // When a selector, parse the tag name and fill out the properties object
-  if (typeof ComponentOrTag === `string`) {
-    // console.log(`about to parse tag on`, ComponentOrTag)
-    ComponentOrTag = parseTag(ComponentOrTag, properties)
+    props.attributes = undefined
   }
 
   // console.log(`ComponentOrTag`,
@@ -69,30 +66,9 @@ export default function h(...args) {
   //     ? ComponentOrTag : ComponentOrTag.name,
   // )
   // console.log(`| args`, args)
-  // console.log(`| properties`, properties)
+  // console.log(`| props`, props)
   // console.log(`| children`, children)
+  // console.log(isReactNode(children))
 
-  // Create the element
-  // const args = [componentOrTag, properties].concat(children)
-  if (typeof ComponentOrTag !== `function`) {
-    return (
-      <ComponentOrTag {...properties}>
-        {children}
-      </ComponentOrTag>
-    )
-  }
-  // if (typeof ComponentOrTag !== `function`) {
-  //   console.log(`||| class?`, ComponentOrTag)
-  //   ComponentOrTag = createReactClass(ComponentOrTag)
-  //   // console.log(`||| reactNode`, ComponentOrTag.type.name, ComponentOrTag)
-  // }
-  if (typeof ComponentOrTag === `function`) {
-    const reactNode = React.createElement(ComponentOrTag, properties, children)
-    // console.log(`||| reactNode`, reactNode.type.name, reactNode)
-    return reactNode
-  }
-}
-
-function isChildren(x) {
-  return typeof x === `string` || typeof x === `number` || Array.isArray(x)
+  return <ComponentOrTag {...props}>{children}</ComponentOrTag>
 }
