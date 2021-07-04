@@ -6,6 +6,7 @@ import {
   BrowserRouter as _Router,
   Link as _Link,
 } from "react-router-dom"
+import luum from "luum"
 import hs, {
   div,
   footer,
@@ -23,58 +24,59 @@ const Route = hs(_Route)
 const Link = hs(_Link)
 
 export default class App extends Component {
-  constructor(props) {
-    super(props)
+  constructor() {
+    super()
     this.state = { kegs }
   }
 
-render = () => (
-  Router({},
-    div(
-      { css: css`
-         height: 100vh;
-         display: flex;
-         flex-direction: column;
-         &, * {
-           background-color: var(--bg-color);
-           color: var(--fg-color);
-         }
-         > main {
-           flex-grow: 1;
-        }
-      ` },
-      header(
-        {},
-        Link(
-          { to: `/` },
-          h1(`Tap Room`),
-        )
-      ),
-      Switch({},
-        Route(
-          { exact: true,
-            path: `/`,
-            render: () => KegList(
-              { kegs: this.state.kegs }
-            ) }
+  render = () => (
+    Router({},
+      div(
+        { css: css`
+          ${luum(`f0eae3`)}
+          height: 100vh;
+          display: flex;
+          flex-direction: column;
+          &, * {
+            background-color: var(--bg-color);
+            color: var(--fg-color);
+          }
+          > main {
+            flex-grow: 1;
+          }
+        ` },
+        header(
+          {},
+          Link(
+            { to: `/` },
+            h1(`Tap Room`),
+          )
         ),
-        Route(
-          { exact: true,
-            path: `/keg/:id`,
-            render: props =>
-              KegDetail(
-                { id: props.match.params.id,
-                  kegs: this.state.kegs }
+        Switch({},
+          Route(
+            { exact: true,
+              path: `/`,
+              render: () => KegList(
+                { kegs: this.state.kegs }
               ) }
+          ),
+          Route(
+            { exact: true,
+              path: `/keg/:id`,
+              render: props =>
+                KegDetail(
+                  { id: props.match.params.id,
+                    kegs: this.state.kegs }
+                ) }
+          ),
+          Route(
+            { component: Page404 }
+          )
         ),
-        Route(
-          { component: Page404 }
+        footer(
+          `sup`,
         )
-      ),
-      footer(
-        `sup`,
       )
     )
   )
-)
 }
