@@ -1,33 +1,80 @@
-/** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react"
-import { BrowserRouter as _Router } from 'react-router-dom'
+import { Component } from 'react'
+import {
+  Route as _Route,
+  Switch as _Switch,
+  BrowserRouter as _Router,
+  Link as _Link,
+} from "react-router-dom"
 import hs, {
-  article,
+  div,
   footer,
+  h1,
   header,
-  nav,
 } from "./util/hyperscript"
-import Routes from "./Routes"
+import Page404 from "./pages/404"
+import KegList from "./pages/KegList"
+import KegDetail from "./pages/KegDetail"
+import kegs from "./static/kegs"
 
 const Router = hs(_Router)
+const Switch = hs(_Switch)
+const Route = hs(_Route)
+const Link = hs(_Link)
 
-export default () => (
-  article(
-    { css: css`
-        height: 100vh;
-        display: flex;
-        background-color: #eee;
+export default class App extends Component {
+  constructor(props) {
+    super(props)
+    this.state = { kegs }
+  }
+
+render = () => (
+  Router({},
+    div(
+      { css: css`
+         height: 100vh;
+         display: flex;
+         flex-direction: column;
+         &, * {
+           background-color: var(--bg-color);
+           color: var(--fg-color);
+         }
+         > main {
+           flex-grow: 1;
+        }
       ` },
-    header(
-      {},
-      nav(`hi`)
-    ),
-    Router(
-      {},
-      Routes()
-    ),
-    footer(
-      `sup`,
+      header(
+        {},
+        Link(
+          { to: `/` },
+          h1(`Tap Room`),
+        )
+      ),
+      Switch({},
+        Route(
+          { exact: true,
+            path: `/`,
+            render: () => KegList(
+              { kegs: this.state.kegs }
+            ) }
+        ),
+        Route(
+          { exact: true,
+            path: `/keg/:id`,
+            render: props =>
+              KegDetail(
+                { id: props.match.params.id,
+                  kegs: this.state.kegs }
+              ) }
+        ),
+        Route(
+          { component: Page404 }
+        )
+      ),
+      footer(
+        `sup`,
+      )
     )
   )
 )
+}
