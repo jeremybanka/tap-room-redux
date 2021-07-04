@@ -8,10 +8,19 @@ import parseTag from "./parse-tag"
 export default function h(...args) {
   let ComponentOrTag = args[0]
   let properties = args[1]
-  const furtherArgs = args.slice(2).map((arg, idx) => (
-    { ...arg, key: typeof arg === `object` ? idx : arg.key }
-  ))
+  const furtherArgs = args.slice(2).map((arg, idx) =>
+    !arg
+      ? arg
+      : typeof arg === `string`
+        ? arg
+        : Array.isArray(arg)
+          ? { ...arg[0], key: typeof arg === `object` ? idx : arg[0].key }
+          : { ...arg, key: typeof arg === `object` ? idx : arg.key }
+
+  )
   let children = furtherArgs[1] ? furtherArgs : furtherArgs[0] || undefined
+
+  // console.log(`| furtherArgs[1]`, furtherArgs[1])
 
   // if only one argument which is an array, wrap items with React.Fragment
   if (args.length === 1 && Array.isArray(ComponentOrTag)) {
@@ -22,7 +31,7 @@ export default function h(...args) {
     // shift them
     children = properties
     properties = {}
-  } else if (arguments.length === 2) {
+  } else if (args.length === 2) {
     // If no children were passed, we don't want to pass "undefined"
     // and potentially overwrite the `children` prop
     children = []
@@ -51,38 +60,37 @@ export default function h(...args) {
 
   // When a selector, parse the tag name and fill out the properties object
   if (typeof ComponentOrTag === `string`) {
-    console.log(`about to parse tag on`, ComponentOrTag)
+    // console.log(`about to parse tag on`, ComponentOrTag)
     ComponentOrTag = parseTag(ComponentOrTag, properties)
   }
 
-  console.log(`ComponentOrTag`,
-    typeof ComponentOrTag === `string`
-      ? ComponentOrTag : ComponentOrTag.name,
-  )
-
-  console.log(`| args`, args)
-  console.log(`| properties`, properties)
-  console.log(`| children`, children)
+  // console.log(`ComponentOrTag`,
+  //   typeof ComponentOrTag === `string`
+  //     ? ComponentOrTag : ComponentOrTag.name,
+  // )
+  // console.log(`| args`, args)
+  // console.log(`| properties`, properties)
+  // console.log(`| children`, children)
 
   // Create the element
   // const args = [componentOrTag, properties].concat(children)
-  if (typeof ComponentOrTag === `string`) {
+  if (typeof ComponentOrTag !== `function`) {
     return (
       <ComponentOrTag {...properties}>
         {children}
       </ComponentOrTag>
     )
   }
-  const reactNode = React.createElement(ComponentOrTag, properties, children)
-  console.log(`| reactNode`, reactNode.type.name, reactNode)
-  return reactNode
-  // return typeof ComponentOrTag === `string`
-  //   ? (
-  //     <ComponentOrTag {...properties}>
-  //       {children}
-  //     </ComponentOrTag>
-  //   )
-  //   : React.createElement(...args)
+  // if (typeof ComponentOrTag !== `function`) {
+  //   console.log(`||| class?`, ComponentOrTag)
+  //   ComponentOrTag = createReactClass(ComponentOrTag)
+  //   // console.log(`||| reactNode`, ComponentOrTag.type.name, ComponentOrTag)
+  // }
+  if (typeof ComponentOrTag === `function`) {
+    const reactNode = React.createElement(ComponentOrTag, properties, children)
+    // console.log(`||| reactNode`, reactNode.type.name, reactNode)
+    return reactNode
+  }
 }
 
 function isChildren(x) {
