@@ -1,5 +1,9 @@
 import helpers from "hyperscript-helpers"
-import hyperscript from "./hyperscript"
+import hyperscript from "./lib"
+
+const hs = Component => (...args) => hyperscript(Component, ...args)
+
+export default hs
 
 export const {
   a, abbr, acronym, address, applet, area, article, aside,
@@ -21,6 +25,3 @@ export const {
   tfoot, th, thead, time, title, tr, track, tt, u, ul,
   video, wbr, xmp,
 } = helpers(hyperscript)
-
-export default Component => (...args) =>
-  hyperscript(Component, ...args)
