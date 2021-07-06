@@ -43,7 +43,9 @@ const hyperscript = (...args) => {
 
   const children = autoKey(getChildren(args))
 
-  return <Tag {...props}>{children}</Tag>
+  return children[0]
+    ? <Tag {...props}>{children}</Tag>
+    : <Tag {...props} />
 }
 
 export default hyperscript // special thanks to: @mlmorg/react-hyperscript
