@@ -6,7 +6,7 @@ import {
   BrowserRouter as _Router,
   Link as _Link,
 } from "react-router-dom"
-import luum, { specToHex } from "./extra"
+import luum, { specToHex } from "luum"
 import hs, { div, footer, h1, header } from "./util/hyperscript"
 import { KegDetail, KegList, NotFound } from "./pages"
 import kegs from "./static/kegs"
