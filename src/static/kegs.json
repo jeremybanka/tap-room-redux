@@ -1,14 +1,20 @@
 [
   {
     "name": "Effervescent Brew",
+    "brand": "Generic Brand",
+    "price": 35,
+    "flavor": "Foamy Flavor",
     "color": "#0a9",
-    "remaining": 16,
-    "total": 20
+    "remaining": 20,
+    "total": 124
   },
   {
     "name": "Celestial Brew",
+    "brand": "Name Brand",
+    "price": 53,
+    "flavor": "Savory Flavor",
     "color": "#2af",
-    "remaining": 25,
-    "total": 30
+    "remaining": 56,
+    "total": 124
   }
 ]
