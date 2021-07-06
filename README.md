@@ -1,4 +1,4 @@
-Tap Room
+# Tap Room
 
 _by Jeremy Banka_
 
@@ -34,9 +34,9 @@ You'll see
 ```js
 Component(
   { someProp: `foo` },
-  p(`Some text`)
+  p(`Some text`),
   p(`Some text with a ${variable}`)
-) // 88 characters. Trust me, it adds up. 
+) // 89 characters. But trust me, it adds up. 
 ```
 
 Everything works the same, but there's no heavy stacks of quasi-XML hogging space in your editor--just lean, mean JS functions! The best part is, it's *fewer than fifty lines* to make this work. Read `src/util/hyperscript/lib.js` to see how.
@@ -64,11 +64,8 @@ Everything works the same, but there's no heavy stacks of quasi-XML hogging spac
 
 - Use VS Code.
 - Install VS Code extension "ESLint" by Dirk Baeumer.
-- Install VS Code extension "Prettier"
-- Ensure that your VS Code settings.json has the following properties set:
+- Ensure that your VS Code settings.json has the following property set:
   ```
-  "editor.formatOnSave": true,
-  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   }
