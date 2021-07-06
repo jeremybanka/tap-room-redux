@@ -18,19 +18,6 @@ const KegList = ({
     {
       css: css`
         section {
-          display: flex;
-          flex-direction: column;
-          transition-property: all;
-          transition-duration: 300ms;
-          background-color: #eee;
-          padding: 10px;
-          width: auto;
-          ~ section {
-            margin-top: 10px;
-          }
-          > * ~ * {
-            margin-top: 10px;
-          }
           &.new {
             width: fit-content;
             background: #e3e3e3;
@@ -64,11 +51,11 @@ const KegList = ({
             color,
           } = keg
           return [
-            {},
             Link({ to: `/keg/${idx}` }, name),
             p(brand),
             p(price ? `${price}¢` : `Free`),
             p(flavor),
+            p(`${remaining}/${total} Pints Remaining`),
             StatusBar({ remaining, total, color }),
           ]
         })())

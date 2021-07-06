@@ -90,10 +90,25 @@ class App extends Component {
               position: relative;
               margin: auto;
             }
-            > main {
+            main {
               flex-grow: 1;
+              section {
+                display: flex;
+                flex-direction: column;
+                transition-property: all;
+                transition-duration: 300ms;
+                background-color: #eee;
+                padding: 10px;
+                width: auto;
+                ~ section {
+                  margin-top: 10px;
+                }
+                > * ~ * {
+                  margin-top: 10px;
+                }
+              }
             }
-            > header {
+            header, footer {
               display: flex;
               height: 100px;
               align-items: center;
@@ -127,7 +142,7 @@ class App extends Component {
           }),
           Route({ component: NotFound })
         ),
-        footer(`sup`)
+        footer(`footer`)
       )
     )
 }
