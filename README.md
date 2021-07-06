@@ -1,70 +1,88 @@
-# Getting Started with Create React App
+Tap Room
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+_by Jeremy Banka_
 
-## Available Scripts
+## Technologies Used
 
-In the project directory, you can run:
+- ✨ JavaScript 🛠 Airbnb ESLint
+- ⚛️ React via `create-react-app`
+- 🏷 Typechecking with `prop-types`
+- 🛣 Paths with `react-router`
+- 👨‍🔬 JSX via `hyperscript`
+- 👩‍🎤 Styling with `emotion.js`  `SCSS`
+- 🎨 Colors and shading with `luum.js`
+- 🧑‍🎨 Diagrams with Adobe Illustrator
 
-### `yarn start`
+## Description
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+This is a React.js demo covering shared state, function components, class components, and CR (but not UD) functionality. No hooks.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+But wait!! It also contains a unique implementation of hyperscript, a minimal, functional wrapper around JSX that's quick to write and easy to read. 
 
-### `yarn test`
+Basically, instead of 
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+```jsx
+<Component someProp="foo">
+  <p>Some text</p>
+  <p>Some text with a {variable}</p>
+</Component> 
+{/* 95 characters */}
+```
 
-### `yarn build`
+You'll see
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+```js
+Component(
+  { someProp: `foo` },
+  p(`Some text`)
+  p(`Some text with a ${variable}`)
+) // 88 characters. Trust me, it adds up. 
+```
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+Everything works the same, but there's no heavy stacks of quasi-XML hogging space in your editor--just lean, mean JS functions! The best part is, it's *fewer than fifty lines* to make this work. Read `src/util/hyperscript/lib.js` to see how.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+(npm package coming soon...)
 
-### `yarn eject`
+## Component Diagram
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+![Component Diagram](./diagram.png)
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Setup/Installation Requirements
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+#### 1: Download the Materials
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
+- Clone this repo: `$ git clone https://github.com/jeremybanka/tap-room`
+- Get your `node_modules` installed: `$ npm i`
 
-## Learn More
+#### 2: Build and Run
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+- Get things compiled and serving: `$ npm run start`
+- This should prompt your browser to open the project on :3000.
+- You can also `$ npm run build` to peep the built code.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+#### Tooling: Getting ESLint Working
 
-### Code Splitting
+- Use VS Code.
+- Install VS Code extension "ESLint" by Dirk Baeumer.
+- Install VS Code extension "Prettier"
+- Ensure that your VS Code settings.json has the following properties set:
+  ```
+  "editor.formatOnSave": true,
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.codeActionsOnSave": {
+    "source.fixAll.eslint": true
+  }
+  ```
+- Now, my meticulously selected formatting preferences will be applied to files in this repo any time you hit save!
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+## Known Bugs
 
-### Analyzing the Bundle Size
+- none identified
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+## License
 
-### Making a Progressive Web App
+Gnu Public License ^3.0. All rights reversed.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+## Contact Information
 
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+hello at jeremybanka dot com
