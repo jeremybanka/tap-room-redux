@@ -1,28 +1,36 @@
 import { css } from "@emotion/react"
-import { div } from "../util/hyperscript"
+import { IStatusBarProps } from "../propTypes"
+import hs, { div } from "../util/hyperscript"
 
-export default ({ remaining, total, color }) => {
-  const arrayTotal = Array.from(Array(total))
+const arrayOfLength = int => Array.from(Array(int))
 
-  return (
-    div(
-      { css: css`
-      --keg-color: ${color};
-      display: flex;
-      height: 50px;
-      width: 100%;
-      gap: 2px
-    ` },
-      ...arrayTotal.map((...args) => {
-        const idx = args[1]
-        const bgColor = idx <= remaining ? `keg-color` : `mg-color`
-        return div(
-          { css: css`
+const autoMap = (int, cb) => arrayOfLength(int).map(cb)
+
+const StatusBar = ({ remaining, total, color }) =>
+  div(
+    {
+      css: css`
+        display: flex;
+        width: 100%;
+        gap: 1px;
+        * {
           height: 50px;
           flex-grow: 1;
-          background-color: var(--${bgColor});
-        ` }
-        )
-      }))
+        }
+        .full {
+          background-color: ${color};
+        }
+        .empty {
+          background-color: #ddd;
+        }
+      `,
+    },
+    autoMap(
+      total,
+      (_, i) => div({ className: i <= remaining - 1 ? `full` : `empty` })
+    )
   )
-}
+
+StatusBar.propTypes = IStatusBarProps
+
+export default hs(StatusBar)
