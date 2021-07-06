@@ -1,9 +1,11 @@
 * {
+  font-size: 20px;
   margin: 0;
   padding: 0;
   background: none;
   border: none;
   outline: none;
+  box-sizing: border-box;
 }
 
 body {
