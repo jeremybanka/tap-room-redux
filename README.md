@@ -8,7 +8,6 @@ _by Jeremy Banka_
 - ⚛️ React via `create-react-app`
 - 🏷 Typechecking with `prop-types`
 - 🛣 Paths with `react-router`
-- 👨‍🔬 JSX via `hyperscript`
 - 👩‍🎤 Styling with `emotion.js`  `SCSS`
 - 🎨 Colors and shading with `luum.js`
 - 🧑‍🎨 Diagrams with Adobe Illustrator
@@ -16,32 +15,6 @@ _by Jeremy Banka_
 ## Description
 
 This is a React.js demo covering shared state, function components, class components, and CR (but not UD) functionality. No hooks.
-
-But wait!! It also contains a unique implementation of hyperscript, a minimal, functional wrapper around JSX that's quick to write and easy to read. 
-
-Basically, instead of 
-
-```jsx
-<Component someProp="foo">
-  <p>Some text</p>
-  <p>Some text with a {variable}</p>
-</Component> 
-{/* 95 characters */}
-```
-
-You'll see
-
-```js
-Component(
-  { someProp: `foo` },
-  p(`Some text`),
-  p(`Some text with a ${variable}`)
-) // 89 characters. But trust me, it adds up. 
-```
-
-Everything works the same, but there's no heavy stacks of quasi-XML hogging space in your editor--just lean, mean JS functions! The best part is, it's *fewer than fifty lines* to make this work. Read `src/util/hyperscript/lib.js` to see how.
-
-(npm package coming soon...)
 
 ## Component Diagram
 
