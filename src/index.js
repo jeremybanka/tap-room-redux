@@ -1,14 +1,11 @@
-import React from 'react'
+import React, { StrictMode } from 'react'
 import ReactDOM from 'react-dom'
 import './core.css'
 import App from './App'
-import hs from './util/hyperscript'
 // import reportWebVitals from './reportWebVitals'
 
-const StrictMode = hs(React.StrictMode)
-
 ReactDOM.render(
-  StrictMode(App()),
+  <StrictMode><App /></StrictMode>,
   document.getElementById(`root`)
 )
 

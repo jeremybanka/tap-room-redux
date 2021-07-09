@@ -1,5 +1,5 @@
-import hs, { h1, main } from "../util/hyperscript"
+/** @jsxImportSource @emotion/react */
 
-const NotFound = () => main(h1(`not found`))
+const NotFound = () => <main><h1>Not Found</h1></main>
 
-export default hs(NotFound)
+export default NotFound

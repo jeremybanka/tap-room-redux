@@ -1,20 +1,15 @@
-import { Component } from "react"
+/** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react"
+import { Component } from "react"
 import {
-  Route as _Route,
-  Switch as _Switch,
-  BrowserRouter as _Router,
-  Link as _Link,
+  Route,
+  Switch,
+  BrowserRouter as Router,
+  Link,
 } from "react-router-dom"
 import luum, { specToHex } from "luum"
-import hs, { div, footer, h1, header } from "./util/hyperscript"
 import { KegDetail, KegList, NotFound } from "./pages"
 import kegs from "./static/kegs"
-
-const Router = hs(_Router)
-const Switch = hs(_Switch)
-const Route = hs(_Route)
-const Link = hs(_Link)
 
 class App extends Component {
   constructor() {
@@ -75,76 +70,79 @@ class App extends Component {
       ),
     }))
 
-  render = () =>
-    Router(
-      div(
-        {
-          css: css`
-            ${luum(`f0eae6`)}
-            height: 100vh;
+  render = () => (
+    <Router>
+      <div css={css`
+        ${luum(`f0eae6`)}
+        height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #ddd;
+        > * {
+          width: calc(100% - 20px);
+          position: relative;
+          margin: auto;
+        }
+        main {
+          flex-grow: 1;
+          section {
             display: flex;
             flex-direction: column;
-            background-color: #ddd;
-            > * {
-              width: calc(100% - 20px);
-              position: relative;
-              margin: auto;
+            transition-property: all;
+            transition-duration: 300ms;
+            background-color: #eee;
+            padding: 10px;
+            width: auto;
+            ~ section {
+              margin-top: 10px;
             }
-            main {
-              flex-grow: 1;
-              section {
-                display: flex;
-                flex-direction: column;
-                transition-property: all;
-                transition-duration: 300ms;
-                background-color: #eee;
-                padding: 10px;
-                width: auto;
-                ~ section {
-                  margin-top: 10px;
-                }
-                > * ~ * {
-                  margin-top: 10px;
-                }
-              }
+            > * ~ * {
+              margin-top: 10px;
             }
-            header, footer {
-              display: flex;
-              height: 100px;
-              align-items: center;
+          }
+        }
+        header, footer {
+          display: flex;
+          height: 100px;
+          align-items: center;
+        }
+      `}
+      >
+        <header>
+          <Link to='/'><h1>Tap Room</h1></Link>
+        </header>
+        <Switch>
+          <Route
+            exact
+            path='/'
+            render={() => (
+              <KegList
+                kegs={this.state.kegs}
+                newKegIsOpen={this.state.newKegIsOpen}
+                newKegName={this.state.newKegName}
+                createKeg={this.createKeg}
+                editNewKeg={this.editNewKeg}
+                toggleNewKegIsOpen={this.toggleNewKegIsOpen}
+              />)}
+          />
+          <Route
+            exact
+            path='/keg/:id'
+            render={
+              props => (
+                <KegDetail
+                  id={Number(props.match.params.id)}
+                  kegs={this.state.kegs}
+                  decrementKeg={this.decrementKeg}
+                />)
             }
-          `,
-        },
-        header(Link({ to: `/` }, h1(`Tap Room`))),
-        Switch(
-          Route({
-            exact: true,
-            path: `/`,
-            render: () =>
-              KegList({
-                kegs: this.state.kegs,
-                newKegIsOpen: this.state.newKegIsOpen,
-                newKegName: this.state.newKegName,
-                createKeg: this.createKeg,
-                editNewKeg: this.editNewKeg,
-                toggleNewKegIsOpen: this.toggleNewKegIsOpen,
-              }),
-          }),
-          Route({
-            exact: true,
-            path: `/keg/:id`,
-            render: props =>
-              KegDetail({
-                id: Number(props.match.params.id),
-                kegs: this.state.kegs,
-                decrementKeg: this.decrementKeg,
-              }),
-          }),
-          Route({ component: NotFound })
-        ),
-        footer(`footer`)
-      )
-    )
+          />
+          <Route component={NotFound} />
+        </Switch>
+        <footer>footer</footer>
+      </div>
+    </Router>
+  )
 }
 
-export default hs(App)
+export default App
