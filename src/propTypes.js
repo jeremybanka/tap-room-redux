@@ -6,32 +6,46 @@ const IBrew = {
   color: string.isRequired,
 }
 
-export const IStatusBarProps = IBrew
-
-const IKeg = {
-  ...IBrew,
+const IKegLabel = {
   name: string.isRequired,
   flavor: string.isRequired,
   price: number.isRequired,
   brand: string.isRequired,
 }
 
-const IKegs = arrayOf(shape(IKeg))
+const IKeg = {
+  ...IBrew,
+  ...IKegLabel,
+}
+
+export const IStatusBarProps = IBrew
+
+const IKegs = {
+  get: arrayOf(shape(IKeg)),
+  create: func.isRequired,
+  decrement: func.isRequired,
+}
+
+const INewKeg = {
+  get: shape({
+    ...IKegLabel,
+    isOpen: bool.isRequired,
+  }),
+  toggleOpen: func.isRequired,
+  edit: func.isRequired,
+  reset: func.isRequired,
+}
 
 const id = number.isRequired
 
 export const IKegDetailProps = {
   id,
-  kegs: IKegs,
-  decrementKeg: func.isRequired,
+  kegs: shape(IKegs),
 }
 
 export const IKegListProps = {
-  kegs: IKegs,
-  createKeg: func.isRequired,
-  newKegIsOpen: bool.isRequired,
-  toggleNewKegIsOpen: func.isRequired,
-  editNewKeg: func.isRequired,
+  kegs: shape(IKegs),
+  newKeg: shape(INewKeg),
 }
 
 export const IButtonProps = {

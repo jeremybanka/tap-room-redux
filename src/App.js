@@ -1,76 +1,27 @@
 /** @jsxImportSource @emotion/react */
 import { css } from "@emotion/react"
-import { Component } from "react"
+import { useSelector } from 'react-redux'
 import {
   Route,
   Switch,
   BrowserRouter as Router,
   Link,
 } from "react-router-dom"
-import luum, { specToHex } from "luum"
+import luum from "luum"
+import * as kegsActions from "./store/kegs"
+import * as newKegActions from "./store/newKeg"
 import { KegDetail, KegList, NotFound } from "./pages"
-import kegs from "./static/kegs"
 
-class App extends Component {
-  constructor() {
-    super()
-    this.state = {
-      kegs,
-      newKegIsOpen: false,
-      newKegName: ``,
-      newKegBrand: ``,
-      newKegPrice: 0,
-      newKegFlavor: ``,
-    }
+const App = () => {
+  const kegs = {
+    ...kegsActions,
+    get: useSelector(kegsActions.select),
   }
-
-  createKeg = () => {
-    this.setState(state => ({
-      kegs: [
-        ...state.kegs,
-        {
-          name: `${state.newKegName || `Unidentified`} Brew`,
-          brand: `${state.newKegBrand || `Generic`} Brand`,
-          price: state.newKegPrice || 0,
-          flavor: `${state.newKegFlavor || `Regular`} Flavor`,
-          color: specToHex({
-            hue: new Date().getSeconds() * 6,
-            sat: 200,
-            lum: 0.7,
-            prefer: `lum`,
-          }),
-          total: 124,
-          remaining: 124,
-        },
-      ],
-    }))
-    this.toggleNewKegIsOpen()
-    this.resetNewKeg()
+  const newKeg = {
+    ...newKegActions,
+    get: useSelector(newKegActions.select),
   }
-
-  resetNewKeg = () => {
-
-  }
-
-  editNewKeg = e => {
-    const key = `newKeg${e.target.placeholder}`
-    const value = key === `newKegPrice`
-      ? Number(e.target.value)
-      : e.target.value
-    this.setState(({ [key]: value }))
-  }
-
-  toggleNewKegIsOpen = () =>
-    this.setState(state => ({ newKegIsOpen: !state.newKegIsOpen }))
-
-  decrementKeg = i =>
-    this.setState(state => ({
-      kegs: state.kegs.map((keg, j) =>
-        j === i && keg.remaining ? { ...keg, remaining: keg.remaining - 1 } : keg
-      ),
-    }))
-
-  render = () => (
+  return (
     <Router>
       <div css={css`
         ${luum(`f0eae6`)}
@@ -117,12 +68,8 @@ class App extends Component {
             path='/'
             render={() => (
               <KegList
-                kegs={this.state.kegs}
-                newKegIsOpen={this.state.newKegIsOpen}
-                newKegName={this.state.newKegName}
-                createKeg={this.createKeg}
-                editNewKeg={this.editNewKeg}
-                toggleNewKegIsOpen={this.toggleNewKegIsOpen}
+                kegs={kegs}
+                newKeg={newKeg}
               />)}
           />
           <Route
@@ -132,8 +79,7 @@ class App extends Component {
               props => (
                 <KegDetail
                   id={Number(props.match.params.id)}
-                  kegs={this.state.kegs}
-                  decrementKeg={this.decrementKeg}
+                  kegs={kegs}
                 />)
             }
           />

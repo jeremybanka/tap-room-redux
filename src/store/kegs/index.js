@@ -26,12 +26,11 @@ export const kegsSlice = createSlice({
         },
       ]
     },
-    decrement: (state, action) =>
-      state.map((keg, j) =>
-        j === action.payload && keg.remaining
-          ? { ...keg, remaining: keg.remaining - 1 }
-          : keg
-      ),
+    decrement: (state, action) => state.map((keg, j) =>
+      j === action.payload && keg.remaining
+        ? { ...keg, remaining: keg.remaining - 1 }
+        : keg
+    ),
   },
 })
 

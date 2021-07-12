@@ -28,7 +28,7 @@ const StatusBar = ({ remaining, total, color }) => (
       autoMap(
         total,
         (_, i) => (
-          <div className={i <= remaining - 1 ? `full` : `empty`} />
+          <div key={i} className={i <= remaining - 1 ? `full` : `empty`} />
         )
       )
     }

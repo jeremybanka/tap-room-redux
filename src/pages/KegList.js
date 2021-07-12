@@ -1,4 +1,5 @@
 /** @jsxImportSource @emotion/react */
+import { useDispatch } from 'react-redux'
 import { Link } from "react-router-dom"
 import { css } from "@emotion/react"
 import StatusBar from "../components/StatusBar"
@@ -7,13 +8,12 @@ import Button from "../components/Button"
 
 const KegList = ({
   kegs,
-  newKegIsOpen,
-  toggleNewKegIsOpen,
-  createKeg,
-  editNewKeg,
-}) => (
-  <main
-    css={css`
+  newKeg,
+}) => {
+  const dispatch = useDispatch()
+  return (
+    <main
+      css={css`
       section {
         &.new {
           width: fit-content;
@@ -34,75 +34,91 @@ const KegList = ({
         }
       }
     `}
-  >
-    {[...kegs, null].map((keg, idx) =>
-      keg
-        ? <section>{(() => {
-          const {
-            name,
-            brand,
-            price,
-            flavor,
-            remaining,
-            total,
-            color,
-          } = keg
-          return (<>
-            <Link to={`/keg/${idx}`}>{name}</Link>
-            <p>{brand}</p>
-            {/* JSX be like: p(brand) 👎 <p>{brand}</p> 🤌 */}
-            <p>{price ? `${price}¢` : `Free`}</p>
-            <p>{flavor}</p>
-            <p>{`${remaining}/${total} Pints Remaining`}</p>
-            <StatusBar remaining={remaining} total={total} color={color} />
-            {/* JSX be like: remaining={remaining} 🥴 👌 */}
-          </>)
-        })()}
-        </section>
-        : newKegIsOpen
+    >
+      {[...kegs.get, null].map((keg, idx) =>
+        keg
           ? (
-            <section className='new open'>
-              <form onSubmit={e => {
-                e.preventDefault()
-                createKeg()
-              }}
-              >
-                {
-                  [`Name`, `Brand`, `Price`, `Flavor`]
-                    .map(attr => (
+            <section key={idx}>{(() => {
+              const {
+                name,
+                brand,
+                price,
+                flavor,
+                remaining,
+                total,
+                color,
+              } = keg
+              return (
+                <>
+                  <Link to={`/keg/${idx}`}>{name}</Link>
+                  <p>{brand}</p>
+                  {/* JSX be like: p(brand) 👎 <p>{brand}</p> 🤌 */}
+                  <p>{price ? `${price}¢` : `Free`}</p>
+                  <p>{flavor}</p>
+                  <p>{`${remaining}/${total} Pints Remaining`}</p>
+                  <StatusBar remaining={remaining} total={total} color={color} />
+                  {/* JSX be like: remaining={remaining} 🥴 👌 */}
+                </>
+              )
+            })()}
+            </section>
+          )
+          : newKeg.get.isOpen
+            ? (
+              <section key={idx} className='new open'>
+                <form onSubmit={e => {
+                  e.preventDefault()
+                  dispatch(newKeg.toggleOpen())
+                }}
+                >
+                  {
+                  [`name`, `brand`, `price`, `flavor`]
+                    .map((attr, idx) => (
                       <input
-                        type={attr === `Price` ? `number` : `text`}
+                        key={idx}
+                        type={attr === `price` ? `number` : `text`}
                         placeholder={attr}
-                        onChange={e => editNewKeg(e)}
+                        onChange={e => {
+                          const key = e.target.placeholder
+                          const value = key === `price`
+                            ? Number(e.target.value)
+                            : e.target.value
+                          dispatch(newKeg.edit({ key, value }))
+                        }}
                       />
                     ))
                 }
-                <Button
-                  label='Done'
-                  onClick={createKeg}
-                />
-                <Button
-                  label='Cancel'
-                  onClick={toggleNewKegIsOpen}
-                />
-              </form>
-            </section>
-          )
-          : (
-            <section
-              role='button'
-              tabIndex={0}
-              onKeyDown={toggleNewKegIsOpen}
-              onClick={toggleNewKegIsOpen}
-              className='new'
-            >
-              New Keg
-            </section>
-          )
-    )
+                  <Button
+                    label='Done'
+                    onClick={() => {
+                      dispatch(kegs.create(newKeg.get))
+                      dispatch(newKeg.toggleOpen())
+                    }}
+                  />
+                  <Button
+                    label='Cancel'
+                    onClick={() => dispatch(newKeg.toggleOpen())}
+                  />
+                </form>
+              </section>
+            )
+            : (
+              <section
+                key={idx}
+                role='button'
+                tabIndex={0}
+                onKeyDown={() => dispatch(newKeg.toggleOpen())}
+                onClick={() => dispatch(newKeg.toggleOpen())}
+                className='new'
+              >
+                New Keg
+              </section>
+            )
+      )
     }
-  </main>
-)
+    </main>
+  )
+}
 
 KegList.propTypes = IKegListProps
 
